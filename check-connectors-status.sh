@@ -1,7 +1,7 @@
 #!/bin/bash
 file_name=connectors_list.txt
 ip_address="$(hostname -I |  awk -F " " '{print $1}')"
-curl -s -X GET http://"$ip_address":8083/connectors/| jq | grep Ora | awk -F "\"" '{print $2}' > "$file_name"
+curl -s -X GET http://"$ip_address":8083/connectors/ | jq | sed '1d;$d' | awk -F "\"" '{print $2}' > "$file_name"
 echo -e "\n\e[36m++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\e[0m\n"
 cat "$file_name" | while IFS= read -r line; do
 check_status="curl -s -X GET http://"$ip_address":8083/connectors/$line/status"
